@@ -10,7 +10,7 @@ use Illuminate\Notifications\Notifiable;
 use Laravel\Fortify\TwoFactorAuthenticatable;
 use Laravel\Jetstream\HasProfilePhoto;
 use Laravel\Sanctum\HasApiTokens;
-use App\Models\Perpustakaan\Perpustakaans;
+use App\Models\Toko\Toko;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class User extends Authenticatable
@@ -67,12 +67,12 @@ class User extends Authenticatable
     }
 
   /**
-   * Get the pinjams for the user.
+   * Get the olders for the user.
    *
    * @return \Illuminate\Database\Eloquent\Relations\HasMany
    */
-  public function pinjams(): HasMany
+  public function olders(): HasMany
     {
-        return $this->hasMany(Perpustakaans::class);
+        return $this->hasMany(user::class);
     }
 }

@@ -1,13 +1,13 @@
 <?php
 
-namespace Database\Factories\Perpustakaan;
+namespace Database\Factories\Toko;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Perpustakaan\Perpustakaans>
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Toko\Toko>
  */
-class PerpustakaansFactory extends Factory
+class TokoFactory extends Factory
 {
     /**
      * Define the model's default state.

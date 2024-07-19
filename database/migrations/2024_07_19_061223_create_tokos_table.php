@@ -11,11 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('perpustakaans', function (Blueprint $table) {
+        Schema::create('tokos', function (Blueprint $table) {
             $table->id();
-            $table->string('nama_buku');
-            $table->string('penerbit');
-            $table->foreignId('user_id')->constrained('users','id');
             $table->timestamps();
         });
     }
@@ -25,6 +22,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('perpustakaans');
+        Schema::dropIfExists('tokos');
     }
 };
