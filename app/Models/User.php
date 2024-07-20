@@ -71,8 +71,12 @@ class User extends Authenticatable
    *
    * @return \Illuminate\Database\Eloquent\Relations\HasMany
    */
-  public function olders(): HasMany
+  public function tokos(): HasMany
     {
         return $this->hasMany(user::class);
+    }
+    public function pesanans(): HasMany
+    {
+        return $this->hasMany('user'::class);
     }
 }

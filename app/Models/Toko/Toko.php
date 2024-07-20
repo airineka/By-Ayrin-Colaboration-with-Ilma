@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Models;
+namespace App\Models;  
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -15,9 +15,9 @@ class Toko extends Model
     {
         return $this->belongsTo(User::class);
     }
-
-    public function pesanan()
+   //untuk menambah relasi ke pesanan
+    public function pesanans()
     {
-        return $this->belongsToMany(Toko::class);
+        return $this->belongsToMany(Pesanan::class 'pesanan_toko');
     }
 }

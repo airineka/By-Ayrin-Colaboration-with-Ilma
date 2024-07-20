@@ -22,19 +22,19 @@ class PesananController extends Controller
     // Tampilkan form untuk membuat pesanan baru
     public function create()
     {
-        $tokos = Auth::user()->tokos;
-        return view('pesanan.create', compact('tokos'));
+        $tokos = Auth::user()->toko;
+        return view('pesanan.create', compact('toko'));
     }
 
     // Simpan pesanan baru
     public function store(Request $request)
     {
         $request->validate([
-            'tokos' => 'required|array',
+            'toko' => 'required|array',
         ]);
 
         $pesanan = Auth::user()->pesanan()->create();
-        $pesanan->tokos()->sync($request->tokos);
+        $pesanan->toko()->sync($request->toko);
 
         return redirect()->route('pesanan.index')->with('success', 'Pesanan berhasil dibuat.');
     }
