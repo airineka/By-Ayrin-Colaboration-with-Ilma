@@ -15,15 +15,15 @@ class PesananController extends Controller
     // Tampilkan semua pesanan milik user yang sedang login
     public function index()
     {
-        $pesanan = Auth::user()->pesanan;
-        return view('pesanan.index', compact('pesanan'));
+        $pesanans = Auth::user()->pesanans; 
+        return view('pesanan.index', compact('pesanans'));
     }
 
     // Tampilkan form untuk membuat pesanan baru
     public function create()
     {
-        $tokos = Auth::user()->toko;
-        return view('pesanan.create', compact('toko'));
+        $tokos = Auth::user()->tokos; 
+        return view('pesanan.create', compact('tokos'));
     }
 
     // Simpan pesanan baru
@@ -33,21 +33,21 @@ class PesananController extends Controller
             'toko' => 'required|array',
         ]);
 
-        $pesanan = Auth::user()->pesanan()->create();
-        $pesanan->toko()->sync($request->toko);
+        $pesanan = Auth::user()->pesanan()->create(); // Buat pesanan baru
+        $pesanan->tokos()->sync($request->toko); // Sinkronkan toko dengan pesanan
 
         return redirect()->route('pesanan.index')->with('success', 'Pesanan berhasil dibuat.');
     }
 
     // Tampilkan detail pesanan
-    public function show(PesananController $pesanan)
+    public function show(Pesanan $pesanan)
     {
         $this->authorize('view', $pesanan);
         return view('pesanan.show', compact('pesanan'));
     }
 
     // Tampilkan form untuk mengedit pesanan
-    public function edit(PesananController $pesanan)
+    public function edit(Pesanan $pesanan)
     {
         $this->authorize('update', $pesanan);
         $tokos = Auth::user()->tokos;
@@ -55,7 +55,7 @@ class PesananController extends Controller
     }
 
     // Update pesanan
-    public function update(Request $request, PesananController $pesanan)
+    public function update(Request $request, Pesanan $pesanan)
     {
         $this->authorize('update', $pesanan);
 
@@ -63,13 +63,13 @@ class PesananController extends Controller
             'toko' => 'required|array',
         ]);
 
-        $pesanan->toko()->sync($request->toko);
+        $pesanan->tokos()->sync($request->toko); // Sinkronkan toko dengan pesanan
 
         return redirect()->route('pesanan.index')->with('success', 'Pesanan berhasil diperbarui.');
     }
 
     // Hapus pesanan
-    public function destroy(PesananController $pesanan)
+    public function destroy(Pesanan $pesanan)
     {
         $this->authorize('delete', $pesanan);
         $pesanan->delete();

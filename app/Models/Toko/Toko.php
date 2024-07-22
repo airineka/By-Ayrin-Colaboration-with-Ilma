@@ -9,7 +9,11 @@ class Toko extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['nama_toko', 'address', 'user_id'];
+    protected $fillable = [
+        'nama_toko',
+        'address',
+        'user_id',
+    ];
 
     public function user()
     {
@@ -18,6 +22,6 @@ class Toko extends Model
    //untuk menambah relasi ke pesanan
     public function pesanans()
     {
-        return $this->belongsToMany(Pesanan::class 'pesanan_toko');
+        return $this->belongsToMany(Pesanan::class);
     }
 }

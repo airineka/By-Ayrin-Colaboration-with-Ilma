@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Http\Controllers\Toko;
 
 use App\Http\Controllers\Controller;
@@ -18,10 +17,12 @@ class TokoController extends Controller
     {
         // Get all the stores owned by the currently logged in user
         $user_id = Auth::id();
-        $tokos = User::find($user_id)->tokos;
-
-        // Return the toko page view with store data
-        return view('pages.toko.index', compact('tokos'));
+        $toko = User::find($user_id)->tokos;
+        $datas = Toko::all();
+        if ($user_id === null) {
+         } 
+         // Return the toko page view with store data
+        return view('toko.index', compact('tokos'));
     }
 
     /**
@@ -30,7 +31,7 @@ class TokoController extends Controller
     public function create()
     {
         // Return the form view to create a new store
-        return view('pages.toko.create');
+        return view('toko.create');
     }
 
     /**
@@ -66,13 +67,18 @@ class TokoController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show($id)
     {
         // Get store data with connected user information
-        $data = Toko::with('user')->find($id);
+        $toko = Toko::with('user')->find($id);
+
+        // Periksa apakah data ditemukan
+        if ($toko === null) {
+            return redirect()->route('toko.index')->with('error', 'Toko tidak ditemukan');
+        }
 
         // Return the toko page view with store data
-        return view('pages.toko.show')->with('data', $data);
+        return view('toko.show', compact('toko'));
     }
 
     /**
@@ -81,10 +87,10 @@ class TokoController extends Controller
     public function edit(string $id)
     {
         // Find a store based on the id
-        $data = Toko::findOrFail($id);
+        $toko = Toko::findOrFail($id);
 
         // Return the form view edit with the store data
-        return view('pages.toko.edit', compact('data'));
+        return view('toko.edit', compact('toko'));
     }
 
     /**
@@ -130,7 +136,6 @@ class TokoController extends Controller
         try {
             // Find a store based on the id
             $toko = Toko::findOrFail($id);
-
             // Delete the store
             $toko->delete();
 
@@ -139,7 +144,6 @@ class TokoController extends Controller
         } catch (\Throwable $e) {
             // Log error message if failed to delete store
             Log::error($e->getMessage());
-
             // Go back to the previous page with an error message
             return back()->withErrors(['error' => 'Store deletion failed']);
         }
