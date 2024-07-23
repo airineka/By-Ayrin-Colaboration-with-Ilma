@@ -22,6 +22,6 @@ class Toko extends Model
    //untuk menambah relasi ke pesanan
     public function pesanans()
     {
-        return $this->belongsToMany(Pesanan::class);
+        return $this->belongsToMany(Pesanan::class, 'pesanan_toko');
     }
 }

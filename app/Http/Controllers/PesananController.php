@@ -22,8 +22,8 @@ class PesananController extends Controller
     // Tampilkan form untuk membuat pesanan baru
     public function create()
     {
-        $tokos = Auth::user()->tokos; 
-        return view('pesanan.create', compact('tokos'));
+        $pesanan = Auth::user()->pesanans; 
+        return view('pesanan.create', compact('pesanans'));
     }
 
     // Simpan pesanan baru
@@ -33,7 +33,7 @@ class PesananController extends Controller
             'toko' => 'required|array',
         ]);
 
-        $pesanan = Auth::user()->pesanan()->create(); // Buat pesanan baru
+        $pesanan = Auth::user()->pesanans()->create(); // Buat pesanan baru
         $pesanan->tokos()->sync($request->toko); // Sinkronkan toko dengan pesanan
 
         return redirect()->route('pesanan.index')->with('success', 'Pesanan berhasil dibuat.');
@@ -71,6 +71,7 @@ class PesananController extends Controller
     // Hapus pesanan
     public function destroy(Pesanan $pesanan)
     {
+        $pesanan = Pesanan::find($pesanan->id);
         $this->authorize('delete', $pesanan);
         $pesanan->delete();
 
