@@ -30,7 +30,7 @@ class User extends Authenticatable
         'profile_photo_url',
     ];
 
-    protected function casts(): array
+    public function getCasts(): array
     {
         return [
             'email_verified_at' => 'datetime',
