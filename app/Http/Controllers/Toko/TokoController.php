@@ -15,14 +15,15 @@ class TokoController extends Controller
      */
     public function index()
     {
+        // Get the currently logged-in user
+        $user = Auth::user();
+        if (!$user) {
+            return redirect()->route('login')->with('error', 'Anda harus login terlebih dahulu.');
+        }
+
         // Get all the stores owned by the currently logged in user
-        $user_id = Auth::id();
-        $tokos = User::find($user_id)->tokos;
-        $datas = Toko::all();
-        if ($user_id === null) {
-         } 
-         // Return the toko page view with store data
-        return view('toko.index', compact('datas'));
+        $tokos = $user->tokos;
+        return view('toko.index', compact('tokos'));
     }
 
     /**
@@ -70,15 +71,15 @@ class TokoController extends Controller
     public function show($id)
     {
         // Get store data with connected user information
-        $tokos = Toko::with('user')->find($id);
+        $toko = Toko::with('user')->find($id);
 
         // Periksa apakah data ditemukan
-        if ($tokos === null) {
+        if ($toko === null) {
             return redirect()->route('toko.index')->with('error', 'Toko tidak ditemukan');
         }
 
         // Return the toko page view with store data
-        return view('toko.show', compact('datas'));
+        return view('toko.show', compact('toko'));
     }
 
     /**
@@ -87,10 +88,10 @@ class TokoController extends Controller
     public function edit(string $id)
     {
         // Find a store based on the id
-        $tokos = Toko::findOrFail($id);
+        $toko = Toko::findOrFail($id);
 
         // Return the form view edit with the store data
-        return view('toko.edit', compact('datas'));
+        return view('toko.edit', compact('toko'));
     }
 
     /**
@@ -107,14 +108,14 @@ class TokoController extends Controller
         // Try to update the store
         try {
             // Find a store based on the id
-            $tokos = Toko::findOrFail($id);
+            $toko = Toko::findOrFail($id);
 
             // Update the store name and address
-            $tokos->nama_toko = $request->nama_toko;
-            $tokos->address = $request->address;
+            $toko->nama_toko = $request->nama_toko;
+            $toko->address = $request->address;
 
             // Save the changes
-            $tokos->save();
+            $toko->save();
 
             // Redirect back to the toko page with a success message
             return redirect()->route('toko.index')->with('success', 'Store updated successfully');
@@ -135,9 +136,9 @@ class TokoController extends Controller
         // Try to delete the store
         try {
             // Find a store based on the id
-            $tokos = Toko::findOrFail($id);
+            $toko = Toko::findOrFail($id);
             // Delete the store
-            $tokos->delete();
+            $toko->delete();
 
             // Redirect back to the toko page with a success message
             return redirect()->route('toko.index')->with('success', 'Store deleted successfully');

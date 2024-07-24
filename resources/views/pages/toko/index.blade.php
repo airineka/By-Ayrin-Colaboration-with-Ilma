@@ -4,7 +4,7 @@
       {{ __('Tokos') }}
     </h2>
   </x-slot>
-  
+
   <div class="py-12">
     <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
       <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg p-2">
@@ -18,34 +18,24 @@
         </div>
         <table class="table table-bordered">
           <thead class="text-center">
-          <tr>
-            <th scope="col">ID</th>
-            <th scope="col">Nama toko</th>
-            <th scope="col">Address</th>
-          </tr>
+            <tr>
+              <th scope="col">ID</th>
+              <th scope="col">Nama toko</th>
+              <th scope="col">Address</th>
+            </tr>
           </thead>
           <tbody>
-          @foreach ($datas as $data)
-            <tr>
-              <th class="text-center">
-                <a href="{{ route('toko.show',$data['id']) }}">
-                  <p>
-                    {{ $data['id'] }}
-                  </p>
-                </a>
-              </th>
-              <th>
-                <p>
-                  {{ $data['nama_toko'] }}
-                </p>
-              </th>
-              <td>
-                <p>
-                  {{ $data['address'] }}
-                </p>
-              </td>
-            </tr>
-          @endforeach
+            @foreach ($tokos as $toko)
+              <tr>
+                <th class="text-center">
+                  <a href="{{ route('toko.show', $toko->id) }}">
+                    <p>{{ $toko->id }}</p>
+                  </a>
+                </th>
+                <th><p>{{ $toko->nama_toko }}</p></th>
+                <td><p>{{ $toko->address }}</p></td>
+              </tr>
+            @endforeach
           </tbody>
         </table>
       </div>

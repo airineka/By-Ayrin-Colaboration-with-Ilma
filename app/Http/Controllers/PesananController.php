@@ -6,6 +6,7 @@ use App\Models\Pesanan;
 use App\Models\Toko;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
 class PesananController extends Controller
@@ -15,15 +16,29 @@ class PesananController extends Controller
     // Tampilkan semua pesanan milik user yang sedang login
     public function index()
     {
-        $pesanans = Auth::user()->pesanans; 
-        return view('pesanan.index', compact('pesanans'));
+        $user = Auth::user();
+        if ($user) {
+            Log::info('User ID: ' . $user->id);
+            $pesanans = $user->pesanans;
+            Log::info('Pesanan Count: ' . $pesanans->count());
+            return view('pesanan.index', compact('pesanans'));
+        } else {
+            Log::error('User is not authenticated.');
+            return redirect()->route('login')->with('error', 'Anda harus login terlebih dahulu.');
+        }
     }
 
     // Tampilkan form untuk membuat pesanan baru
     public function create()
     {
-        $pesanan = Auth::user()->pesanans; 
-        return view('pesanan.create', compact('pesanans'));
+        $user = Auth::user();
+        if ($user) {
+            $tokos = $user->tokos;
+            return view('pesanan.create', compact('tokos'));
+        } else {
+            Log::error('User is not authenticated.');
+            return redirect()->route('login')->with('error', 'Anda harus login terlebih dahulu.');
+        }
     }
 
     // Simpan pesanan baru
@@ -33,10 +48,15 @@ class PesananController extends Controller
             'toko' => 'required|array',
         ]);
 
-        $pesanan = Auth::user()->pesanans()->create(); // Buat pesanan baru
-        $pesanan->tokos()->sync($request->toko); // Sinkronkan toko dengan pesanan
-
-        return redirect()->route('pesanan.index')->with('success', 'Pesanan berhasil dibuat.');
+        $user = Auth::user();
+        if ($user) {
+            $pesanan = $user->pesanans()->create(); // Buat pesanan baru
+            $pesanan->tokos()->sync($request->toko); // Sinkronkan toko dengan pesanan
+            return redirect()->route('pesanan.index')->with('success', 'Pesanan berhasil dibuat.');
+        } else {
+            Log::error('User is not authenticated.');
+            return redirect()->route('login')->with('error', 'Anda harus login terlebih dahulu.');
+        }
     }
 
     // Tampilkan detail pesanan
@@ -71,7 +91,6 @@ class PesananController extends Controller
     // Hapus pesanan
     public function destroy(Pesanan $pesanan)
     {
-        $pesanan = Pesanan::find($pesanan->id);
         $this->authorize('delete', $pesanan);
         $pesanan->delete();
 
