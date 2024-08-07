@@ -13,8 +13,12 @@ use Illuminate\Support\Facades\Schema;
     {
         Schema::create('pesanans', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained()->onDelete('cascade');
+            $table->string('nama');
+            $table->string('nama_pesanan');
+            $table->decimal('total', 10, 2);
             $table->timestamps();
+            $table->foreignId('user_id')->constrained('users');
+            $table->foreignId('toko_id')->constrained('toko');
         });
     }
 

@@ -1,6 +1,8 @@
 <?php
 
 namespace App\Models;
+use App\Models\Toko\Pesanan;
+use App\Models\Toko\Toko;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -53,7 +55,7 @@ class User extends Authenticatable
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
-    public function pesanans(): HasMany
+    public function pesanan(): HasMany
     {
         return $this->hasMany(Pesanan::class);
     }

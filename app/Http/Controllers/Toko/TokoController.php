@@ -16,14 +16,13 @@ class TokoController extends Controller
     public function index()
     {
         // Get the currently logged-in user
-        $user = Auth::user();
-        if (!$user) {
-            return redirect()->route('login')->with('error', 'Anda harus login terlebih dahulu.');
-        }
-
+        $toko = Toko::all();  
+        $user_id = Auth::user()->id;
+        $toko = user::find($user_id)->tokos;
+        $pesanans = user::find($user_id)->tokos;
         // Get all the stores owned by the currently logged in user
-        $tokos = $user->tokos;
-        return view('toko.index', compact('tokos'));
+        $toko = $user_id->tokos;
+        return view('pages.toko.index', compact('tokos','pesanans'));
     }
 
     /**
@@ -32,7 +31,7 @@ class TokoController extends Controller
     public function create()
     {
         // Return the form view to create a new store
-        return view('toko.create');
+        return view('pages.toko.create');
     }
 
     /**
@@ -68,30 +67,24 @@ class TokoController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show($id)
+    public function show(Toko $tokos)
     {
         // Get store data with connected user information
-        $toko = Toko::with('user')->find($id);
-
-        // Periksa apakah data ditemukan
-        if ($toko === null) {
-            return redirect()->route('toko.index')->with('error', 'Toko tidak ditemukan');
-        }
-
+        $tokos->load('user');
         // Return the toko page view with store data
-        return view('toko.show', compact('toko'));
+        return view('pages.toko.show', compact('toko'));
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit($id)
     {
         // Find a store based on the id
         $toko = Toko::findOrFail($id);
 
         // Return the form view edit with the store data
-        return view('toko.edit', compact('toko'));
+        return view('pages.toko.edit', compact('toko'));
     }
 
     /**

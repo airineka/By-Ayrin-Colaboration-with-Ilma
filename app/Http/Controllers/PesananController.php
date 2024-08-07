@@ -1,9 +1,11 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Toko;
 
-use App\Models\Pesanan;
-use App\Models\Toko;
+use App\Http\Controllers\Controller;  
+use App\Models\Toko\Pesanan;
+use App\Models\User;
+use App\Models\Toko;  
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
@@ -16,84 +18,95 @@ class PesananController extends Controller
     // Tampilkan semua pesanan milik user yang sedang login
     public function index()
     {
-        $user = Auth::user();
-        if ($user) {
-            Log::info('User ID: ' . $user->id);
-            $pesanans = $user->pesanans;
-            Log::info('Pesanan Count: ' . $pesanans->count());
-            return view('pesanan.index', compact('pesanans'));
-        } else {
-            Log::error('User is not authenticated.');
-            return redirect()->route('login')->with('error', 'Anda harus login terlebih dahulu.');
+        $user_id = Auth::user()->id;
+            $pesanan = user::find($user_id)->pesanans;
+            return view('pages.toko.index',compact('pesanans'));
         }
-    }
+    
 
     // Tampilkan form untuk membuat pesanan baru
     public function create()
     {
-        $user = Auth::user();
-        if ($user) {
-            $tokos = $user->tokos;
-            return view('pesanan.create', compact('tokos'));
-        } else {
-            Log::error('User is not authenticated.');
-            return redirect()->route('login')->with('error', 'Anda harus login terlebih dahulu.');
-        }
-    }
+        $pesanan= Auth::user()->pesanan;
+            return view('pages.pesanan.create', compact('pesanan'));
+        } 
+    
 
     // Simpan pesanan baru
     public function store(Request $request)
     {
         $request->validate([
-            'toko' => 'required|array',
+            'user_id' => 'required',
+            'nama' => 'required',
         ]);
 
-        $user = Auth::user();
-        if ($user) {
-            $pesanan = $user->pesanans()->create(); // Buat pesanan baru
-            $pesanan->tokos()->sync($request->toko); // Sinkronkan toko dengan pesanan
-            return redirect()->route('pesanan.index')->with('success', 'Pesanan berhasil dibuat.');
-        } else {
-            Log::error('User is not authenticated.');
-            return redirect()->route('login')->with('error', 'Anda harus login terlebih dahulu.');
-        }
-    }
+        // Try to create a new oder
+        try {
+                Pesanan::create([
+                'pesanan' => $request->pesanan,
+                'toko' => $request->toko,
+                'total' => $request->total,
+                'user_id' => Auth::user()->id,
+            ]);
+            // Redirect back to the page with a succes message
+            return redirect()->route('pesanan.index')->with('succes','order berhasil dibuat.');
+        } catch (\Throwable $e) {
+            log::error($e->getMessage());
 
+            return redirect()->route('pesanan.index')->with('error', 'order gagal dibuat.');
+            }
+        }
+       
+           
     // Tampilkan detail pesanan
-    public function show(Pesanan $pesanan)
+    public function show($id)
     {
-        $this->authorize('view', $pesanan);
-        return view('pesanan.show', compact('pesanan'));
+        $pesanan = pesanan::with('user')->find($id);
+        return view('pages.pesanan.show', compact('pesanan'));
     }
 
     // Tampilkan form untuk mengedit pesanan
     public function edit(Pesanan $pesanan)
     {
-        $this->authorize('update', $pesanan);
-        $tokos = Auth::user()->tokos;
-        return view('pesanan.edit', compact('pesanan', 'tokos'));
+        // Return the form view edit with the order data
+        return view('pages.pesanan.edit', compact('pesanan'));
     }
 
     // Update pesanan
     public function update(Request $request, Pesanan $pesanan)
     {
-        $this->authorize('update', $pesanan);
-
         $request->validate([
-            'toko' => 'required|array',
+            'user_id' => 'required',
+            'nama_pesanan' => 'required',
         ]);
 
-        $pesanan->tokos()->sync($request->toko); // Sinkronkan toko dengan pesanan
+        // Try to update the order
+        try {
+            $pesanan->nama_pesanan = $request->nama_pesanan;
+            $pesanan->toko = $request->toko;
+            // Save the changes
+            $pesanan->save();
 
-        return redirect()->route('pesanan.index')->with('success', 'Pesanan berhasil diperbarui.');
-    }
+            return redirect()->route('pesanan.index')->with('succes', 'Sumber daya berhasil diperbarui');
+        } catch (\Throwable $e) {
+            log::error($e->getMessage());
+            return redirect()->route('pesanan.index')->with('error','Pesanan gagal dibuat');
+        }
+        }
 
-    // Hapus pesanan
+    // Hapus pesanan dari database
     public function destroy(Pesanan $pesanan)
     {
-        $this->authorize('delete', $pesanan);
+        // Try to delete the order
+    try { 
+        // Delete the order
         $pesanan->delete();
 
-        return redirect()->route('pesanan.index')->with('success', 'Pesanan berhasil dihapus.');
+        return redirect()->route('pesanan.index')->with('success', 'Sumber daya berhasil dihapus');
+    }   catch (\Throwable $e) {
+            Log::error($e->getMessage());
+  
+            return back()->withErrors(['error' => 'Sumber Daya gagal dihapus!']); 
     }
+    }   
 }

@@ -1,16 +1,23 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\Toko;
 
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 class Pesanan extends Model
 {
     use HasFactory;
 
     // Fields that are mass assignable
-    protected $fillable = ['user_id'];
+    protected $fillable = [
+        'user_id',
+        'toko_id',
+        'nama_pesanan',
+        'nama_toko',
+        'total',
+    ];
 
     /**
      * Get the user that owns the pesanan.

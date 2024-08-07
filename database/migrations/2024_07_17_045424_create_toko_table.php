@@ -15,8 +15,8 @@ return new class extends Migration
             $table->id();
             $table->string('nama_toko');
             $table->string('address');
-            $table->foreignId('user_id')->constrained('users','id');
             $table->timestamps();
+            $table->foreignId('user_id')->constrained('users','id');
         });
     }
 
