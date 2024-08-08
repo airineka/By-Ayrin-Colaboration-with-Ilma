@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Models;
+
 use App\Models\Toko\Pesanan;
 use App\Models\Toko\Toko;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -14,6 +15,11 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 class User extends Authenticatable
 {
     use HasApiTokens, HasFactory, HasProfilePhoto, Notifiable, TwoFactorAuthenticatable;
+
+    /**
+     * The attributes that are mass assignable.
+     * @var array<int, string>
+     */
 
     protected $fillable = [
         'name',
@@ -45,7 +51,7 @@ class User extends Authenticatable
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
-    public function tokos(): HasMany
+    public function toko(): HasMany
     {
         return $this->hasMany(Toko::class); 
     }

@@ -2,7 +2,7 @@
 namespace App\Http\Controllers\Toko;
 
 use App\Http\Controllers\Controller;
-use App\Models\Toko;
+use App\Models\Toko\Toko;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -17,12 +17,12 @@ class TokoController extends Controller
     {
         // Get the currently logged-in user
         $toko = Toko::all();  
-        $user_id = Auth::user()->id;
-        $toko = user::find($user_id)->tokos;
-        $pesanans = user::find($user_id)->tokos;
+
+        $user = Auth::user();
+        $toko = $user->toko; 
+        $pesanan = $user->pesanan;
         // Get all the stores owned by the currently logged in user
-        $toko = $user_id->tokos;
-        return view('pages.toko.index', compact('tokos','pesanans'));
+        return view('pages.dashboard.index', compact('toko','pesanan'));
     }
 
     /**
@@ -67,10 +67,10 @@ class TokoController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Toko $tokos)
+    public function show(Toko $toko)
     {
         // Get store data with connected user information
-        $tokos->load('user');
+        $toko->load('user');
         // Return the toko page view with store data
         return view('pages.toko.show', compact('toko'));
     }

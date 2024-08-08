@@ -1,7 +1,7 @@
 <?php
 
 use App\Http\Controllers\Toko\TokoController;
-use App\Http\Controllers\PesananController;
+use App\Http\Controllers\Toko\PesananController;
 use Illuminate\Support\Facades\Route;
 
 // Route::view maps the root URL ("/") to the welcome view.
@@ -15,6 +15,6 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
 
   // This will automatically create multiple routes for the 'Perpustakaan' resource or in your case, routes to handle book related requests. The standard routes created for this would be create, read, update, delete and others
   Route::resource('toko', TokoController::class)->names('toko');
-  Route::resource('pesanans', PesananController::class)->names('pesanans');
+  Route::resource('pesanan', PesananController::class)->names('pesanan');
 });
 

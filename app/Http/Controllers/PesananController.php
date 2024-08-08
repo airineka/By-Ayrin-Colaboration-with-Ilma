@@ -4,8 +4,7 @@ namespace App\Http\Controllers\Toko;
 
 use App\Http\Controllers\Controller;  
 use App\Models\Toko\Pesanan;
-use App\Models\User;
-use App\Models\Toko;  
+use App\Models\User; 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
@@ -18,9 +17,13 @@ class PesananController extends Controller
     // Tampilkan semua pesanan milik user yang sedang login
     public function index()
     {
-        $user_id = Auth::user()->id;
-            $pesanan = user::find($user_id)->pesanans;
-            return view('pages.toko.index',compact('pesanans'));
+        $pesanan = Pesanan::all();
+        $user= Auth::user()->id;
+            $pesanan = user::find($user)->pesanan;
+            $pesanan = user::find($user)->toko;
+            $pesanan = $user->pesanan;
+    
+            return view('pages.pesanan.index',compact('pesanan'));
         }
     
 

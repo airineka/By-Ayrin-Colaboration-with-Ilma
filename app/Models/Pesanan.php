@@ -2,6 +2,7 @@
 
 namespace App\Models\Toko;
 
+
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -21,8 +22,10 @@ class Pesanan extends Model
 
     /**
      * Get the user that owns the pesanan.
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function user()
+    //relasi ke model user, setiap pesanan punya 1 user
+    public function user(): BelongsTo
     {
         return $this->belongsTo(User::class); 
     }
@@ -30,6 +33,7 @@ class Pesanan extends Model
     /**
      * The tokos that belong to the pesanan.
      */
+    //untuk relasi model pesanan ke tokonya
     public function tokos()
     { 
         return $this->belongsToMany(Toko::class, 'pesanan_toko');
