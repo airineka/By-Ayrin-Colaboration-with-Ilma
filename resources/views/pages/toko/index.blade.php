@@ -34,7 +34,7 @@
               <tr>
                 <th class="text-center">
                   <a href="{{ route('toko.show',$toko['id']) }}">
-                      {{ $item['id'] }}
+                      {{ $item->id }}
                   </a>
                 </td>
                 <td>
@@ -83,7 +83,7 @@
                   <tr>
                     <th class="text-center">
                       <a href="{{ route('pesanan.show', $item['id']) }}">
-                        {{ $item['id'] }}
+                        {{ $item->id}}
                       </a>
                     </td>
                     <td>

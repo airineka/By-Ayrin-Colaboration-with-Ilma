@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Models\Toko;
+namespace  App\Models\Toko;
 
 
 use App\Models\User;
@@ -34,7 +34,7 @@ class Pesanan extends Model
      * The tokos that belong to the pesanan.
      */
     //untuk relasi model pesanan ke tokonya
-    public function tokos()
+    public function toko()
     { 
         return $this->belongsToMany(Toko::class, 'pesanan_toko');
     }

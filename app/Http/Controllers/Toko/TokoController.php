@@ -22,7 +22,7 @@ class TokoController extends Controller
         $toko = $user->toko; 
         $pesanan = $user->pesanan;
         // Get all the stores owned by the currently logged in user
-        return view('pages.dashboard.index', compact('toko','pesanan'));
+        return view('pages.toko.index', compact('toko','pesanan'));
     }
 
     /**
@@ -70,10 +70,13 @@ class TokoController extends Controller
     public function show(Toko $toko)
     {
         // Get store data with connected user information
-        $toko->load('user');
+        {
+            // Get store data with connected user information
+            $toko->load('user');
         // Return the toko page view with store data
         return view('pages.toko.show', compact('toko'));
     }
+}
 
     /**
      * Show the form for editing the specified resource.
@@ -86,6 +89,7 @@ class TokoController extends Controller
         // Return the form view edit with the store data
         return view('pages.toko.edit', compact('toko'));
     }
+   
 
     /**
      * Update the specified resource in storage.
