@@ -17,7 +17,7 @@ class CreatePesananTokoTable extends Migration
             $table->foreignId('pesanan_id')->constrained()->onDelete('cascade');
             $table->timestamps();
 
-            $table->foreign('toko_id')->references('id')->on('tokos')->onDelete('cascade');
+            $table->foreign('toko_id')->references('id')->on('toko')->onDelete('cascade');
             $table->foreign('pesanan_id')->references('id')->on('pesanan')->onDelete('cascade');
         });
     }

@@ -19,10 +19,9 @@ class TokoController extends Controller
         $toko = Toko::all();  
 
         $user = Auth::user();
-        $toko = $user->toko; 
-        $pesanan = $user->pesanan;
+        $toko = $user->toko;  
         // Get all the stores owned by the currently logged in user
-        return view('pages.toko.index', compact('toko','pesanan'));
+        return view('pages.toko.index', compact('toko'));
     }
 
     /**

@@ -19,6 +19,9 @@ class PesananController extends Controller
     {
         $pesanan = Pesanan::all();
         $user= Auth::user()->id;
+        if ($user === null) {
+            return redirect()->back()->with("error, anda harus login terlebih dahulu");
+        }
             $pesanan = user::find($user)->pesanan;
             $pesanan = user::find($user)->toko;
             $pesanan = $user->pesanan;
